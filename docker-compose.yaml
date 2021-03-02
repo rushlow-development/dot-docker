@@ -1,0 +1,72 @@
+version: '3.7'
+services:
+    workspace:
+        build:
+            context: ./.docker/workspace
+            args:
+                - PHP_VERSION=7.4
+        volumes:
+            - ./:/var/htdocs
+        tty: true
+
+    workspace-8:
+        build:
+            context: ./.docker/workspace-8
+            args:
+                - PHP_VERSION=8.0
+        volumes:
+            - ./:/var/htdocs
+        tty: true
+
+    php-cli:
+        build:
+            context: ./.docker/php-cli
+            args:
+                - PHP_VERSION=7.4
+        environment:
+            - FUNC_TEST_ENV_FILE=.env.test.local
+        volumes:
+            - ./:/var/htdocs
+
+    php-fpm:
+        build:
+            context: ./.docker/php-fpm
+            args:
+                - PHP_VERSION=7.4
+                - OPCACHE_ENABLE=0
+        volumes:
+            - ./:/var/htdocs
+
+    php-fpm-8:
+        build:
+            context: ./.docker/php-fpm-8
+            args:
+                - PHP_VERSION=8.0
+                - OPCACHE_ENABLE=0
+        volumes:
+            - ./:/var/htdocs
+
+    nginx:
+        build:
+            context: ./.docker/nginx
+        volumes:
+            - ./public:/var/htdocs/public
+            - ./.docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./.docker/nginx/conf.d:/etc/nginx/conf.d
+        depends_on:
+            - php-fpm
+        ports:
+            - "80:80"
+            - "443:443"
+
+    database:
+        image: 'mariadb:latest'
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: main
+        ports:
+            # To allow the host machine to access the ports below, modify the lines below.
+            # For example, to allow the host to connect to port 3306 on the container, you would change
+            # "3306" to "3306:3306". Where the first port is exposed to the host and the second is the container port.
+            # See https://docs.docker.com/compose/compose-file/#ports for more information.
+            - '3306:3306'

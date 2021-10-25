@@ -1,6 +1,6 @@
-ARG PHP_VERSION=8.0
+ARG PHP_VERSION
 
-FROM php:${PHP_VERSION}-fpm-buster
+FROM php:${PHP_VERSION}-cli-bullseye
 
 # Install dependencies
 RUN apt-get update && apt-get install -yqq \
@@ -15,13 +15,9 @@ RUN apt-get update && apt-get install -yqq \
     libcurl4-openssl-dev \
     libxslt1-dev \
     libxslt1.1 \
-    libicu63 \
+    libicu67 \
     libicu-dev \
     libpq-dev
-
-RUN apt-get install -yqq \
-    postgresql-client \
-    mariadb-client
 
 
 RUN docker-php-ext-install pdo_mysql

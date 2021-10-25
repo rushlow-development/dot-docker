@@ -4,15 +4,6 @@ services:
         build:
             context: ./.docker/workspace
             args:
-                - PHP_VERSION=7.4
-        volumes:
-            - ./:/var/htdocs
-        tty: true
-
-    workspace-8:
-        build:
-            context: ./.docker/workspace-8
-            args:
                 - PHP_VERSION=8.0
         volumes:
             - ./:/var/htdocs
@@ -22,9 +13,7 @@ services:
         build:
             context: ./.docker/php-cli
             args:
-                - PHP_VERSION=7.4
-        environment:
-            - FUNC_TEST_ENV_FILE=.env.test.local
+                - PHP_VERSION=8.0
         volumes:
             - ./:/var/htdocs
 
@@ -32,17 +21,7 @@ services:
         build:
             context: ./.docker/php-fpm
             args:
-                - PHP_VERSION=7.4
-                - OPCACHE_ENABLE=0
-        volumes:
-            - ./:/var/htdocs
-
-    php-fpm-8:
-        build:
-            context: ./.docker/php-fpm-8
-            args:
                 - PHP_VERSION=8.0
-                - OPCACHE_ENABLE=0
         volumes:
             - ./:/var/htdocs
 

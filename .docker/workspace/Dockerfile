@@ -1,6 +1,6 @@
 ARG PHP_VERSION
 
-FROM php:${PHP_VERSION}-cli-buster
+FROM php:${PHP_VERSION}-cli-bullseye
 
 # Install dependencies
 RUN apt-get update && apt-get install -yqq \
@@ -15,9 +15,12 @@ RUN apt-get update && apt-get install -yqq \
     libcurl4-openssl-dev \
     libxslt1-dev \
     libxslt1.1 \
-    libicu63 \
+    libicu67 \
     libicu-dev \
-    libpq-dev
+    libpq-dev \
+    chromium \
+    chromium-driver \
+    firefox-esr
 
 RUN apt-get install -yqq \
     postgresql-client \
@@ -70,8 +73,7 @@ RUN wget https://get.symfony.com/cli/installer -O - | bash
 # Make Symfony Global
 RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
-# Copy bash aliases defined on host to container
-COPY .bash_aliases /home/developer/.bash_aliases
+COPY php.ini /usr/local/etc/php/php.ini
 
 # Set which account to use
 USER developer

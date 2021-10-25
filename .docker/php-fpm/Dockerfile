@@ -1,22 +1,31 @@
-ARG PHP_VERSION=7.4
+ARG PHP_VERSION=8.0
 
-FROM php:${PHP_VERSION}-fpm-alpine
+FROM php:${PHP_VERSION}-fpm-buster
 
-RUN apk add --no-cache bash
-RUN apk add --no-cache libsodium
-RUN apk add --no-cache libsodium-dev
-RUN apk add --no-cache libxslt-dev
-RUN apk add --no-cache icu-libs
-RUN apk add --no-cache icu-dev
-RUN apk add --no-cache libxslt-dev
-RUN apk add --no-cache git
-RUN apk add --no-cache libzip-dev
-RUN apk add --no-cache zip
-RUN apk add --no-cache unzip
-RUN apk add --no-cache postgresql-dev
-RUN apk add --no-cache $PHPIZE_DEPS
+# Install dependencies
+RUN apt-get update && apt-get install -yqq \
+    libzip-dev \
+    zip \
+    unzip \
+    wget \
+    gnupg \
+    git \
+    libsodium-dev \
+    libsodium23 \
+    libcurl4-openssl-dev \
+    libxslt1-dev \
+    libxslt1.1 \
+    libicu63 \
+    libicu-dev \
+    libpq-dev
+
+RUN apt-get install -yqq \
+    postgresql-client \
+    mariadb-client
+
 
 RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install pdo_pgsql
 RUN docker-php-ext-install sodium
 RUN docker-php-ext-install xsl
 RUN docker-php-ext-configure intl
@@ -27,6 +36,7 @@ RUN docker-php-ext-install pdo_pgsql
 RUN docker-php-ext-install exif
 RUN docker-php-ext-install soap
 RUN docker-php-ext-install bcmath
+RUN docker-php-ext-install curl
 
 RUN pecl install xdebug
 

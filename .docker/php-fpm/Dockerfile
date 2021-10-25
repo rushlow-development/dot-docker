@@ -1,6 +1,6 @@
 ARG PHP_VERSION
 
-FROM php:${PHP_VERSION}-cli-bullseye
+FROM php:${PHP_VERSION}-fpm-bullseye
 
 # Install dependencies
 RUN apt-get update && apt-get install -yqq \

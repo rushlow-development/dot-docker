@@ -26,7 +26,6 @@ RUN apt-get install -yqq \
     postgresql-client \
     mariadb-client
 
-
 RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install pdo_pgsql
 RUN docker-php-ext-install sodium
@@ -40,6 +39,9 @@ RUN docker-php-ext-install exif
 RUN docker-php-ext-install soap
 RUN docker-php-ext-install bcmath
 RUN docker-php-ext-install curl
+
+RUN pecl install -o -f redis \
+    && rm -rf /tmp/pear
 
 # Install node and yarn
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash && \

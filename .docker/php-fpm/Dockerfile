@@ -19,7 +19,6 @@ RUN apt-get update && apt-get install -yqq \
     libicu-dev \
     libpq-dev
 
-
 RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install pdo_pgsql
 RUN docker-php-ext-install sodium
@@ -35,6 +34,9 @@ RUN docker-php-ext-install bcmath
 RUN docker-php-ext-install curl
 
 RUN pecl install xdebug
+
+RUN pecl install -o -f redis \
+    && rm -rf /tmp/pear
 
 COPY php.ini /usr/local/etc/php/php.ini
 

@@ -1,10 +1,7 @@
 version: '3.7'
 services:
     workspace:
-        build:
-            context: ./.docker/workspace
-            args:
-                - PHP_VERSION=8.0
+        image: 'rushlowdev/php-cli:8.1-cli-bullseye'
         volumes:
             - ./:/var/htdocs
         tty: true
@@ -12,26 +9,18 @@ services:
     php-cli:
         build:
             context: ./.docker/php-cli
-            args:
-                - PHP_VERSION=8.0
         volumes:
             - ./:/var/htdocs
 
     php-fpm:
-        build:
-            context: ./.docker/php-fpm
-            args:
-                - PHP_VERSION=8.0
+        image: 'rushlowdev/php-cli:8.1-fpm-bullseye'
         volumes:
             - ./:/var/htdocs
 
     nginx:
-        build:
-            context: ./.docker/nginx
+        image: 'rushlowdev/nginx:alpine'
         volumes:
             - ./public:/var/htdocs/public
-            - ./.docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-            - ./.docker/nginx/conf.d:/etc/nginx/conf.d
         depends_on:
             - php-fpm
         ports:
